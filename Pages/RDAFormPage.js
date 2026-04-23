@@ -7,7 +7,8 @@ export default class RDAFormPage {
 
   async navigate() {
     await this.page.goto(
-      'https://www.ubldigital.com/NRP-Services/Roshan-Digital-Account-Opening-Form'
+      'https://www.ubldigital.com/NRP-Services/Roshan-Digital-Account-Opening-Form',
+      { waitUntil: 'networkidle', timeout: 60000 } // Intezar karein jab tak network sukoon mein na aa jaye
     );
   }
 
