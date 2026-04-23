@@ -44,10 +44,7 @@ export default class RDAFormPage {
   }
 
   async uploadDocuments(filePath) {
-    const defaultPath = path.resolve(
-      process.cwd(),
-      'test-data/Screenshot 2026-04-16 115601.png'
-    );
+    const defaultPath = path.resolve(process.cwd(), 'test-data/Screenshot 2026-04-16 115601.png');
     const finalPath = filePath || defaultPath;
 
     const fileInputs = this.page.locator('input[id^="filepond--browser"]');
@@ -56,13 +53,7 @@ export default class RDAFormPage {
     await fileInputs.nth(0).setInputFiles(finalPath);
     await fileInputs.nth(1).setInputFiles(finalPath);
 
-    await this.page
-      .getByRole('button', { name: /remove/i })
-      .first()
-      .waitFor({
-        state: 'visible',
-        timeout: 50000,
-      });
+    await this.page.getByRole('button', { name: /remove/i }).first().waitFor({state: 'visible',timeout: 50000,});
   } // ✅ FIXED: properly closed method
 
   async fillPersonalDetails(data) {
