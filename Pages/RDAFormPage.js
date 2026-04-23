@@ -43,26 +43,27 @@ export default class RDAFormPage {
     await this.page.locator('#btnContinuePrefPrimaryRDA').click();
   }
 
-  // ✅ FIXED: Using Relative Paths for GitHub Actions compatibility
   async uploadDocuments(filePath) {
-    // If no filePath is provided, look for the file inside your project folder
-    // Ensure you have a 'test-data' folder in your project root with this image!
-    const defaultPath = path.resolve(process.cwd(), 'test-data/Screenshot 2026-04-22 180521.png');
+    const defaultPath = path.resolve(
+      process.cwd(),
+      'test-data/Screenshot 2026-04-16 115601.png'
+    );
     const finalPath = filePath || defaultPath;
 
     const fileInputs = this.page.locator('input[id^="filepond--browser"]');
     await fileInputs.first().waitFor({ state: 'visible' });
 
-    // Upload to both inputs
     await fileInputs.nth(0).setInputFiles(finalPath);
     await fileInputs.nth(1).setInputFiles(finalPath);
 
-    // Wait for upload completion
-    await this.page.getByRole('button', { name: /remove/i }).first().waitFor({ 
-        state: 'visible', 
-        timeout: 50000 
-    });
-  }
+    await this.page
+      .getByRole('button', { name: /remove/i })
+      .first()
+      .waitFor({
+        state: 'visible',
+        timeout: 50000,
+      });
+  } // ✅ FIXED: properly closed method
 
   async fillPersonalDetails(data) {
     await this.page.locator('#dnn_ctr7394_RdaAccountForm_txtFullName').fill(data.name);
@@ -94,7 +95,7 @@ export default class RDAFormPage {
   }
 
   async proceedToOTP() {
-    await this.page.locator('#btnNextDetailsPrimaryRDA').click();  
+    await this.page.locator('#btnNextDetailsPrimaryRDA').click();
     await this.page.waitForTimeout(5000);
   }
 }
