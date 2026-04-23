@@ -43,18 +43,30 @@ export default class RDAFormPage {
     await this.page.locator('#btnContinuePrefPrimaryRDA').click();
   }
 
-  async uploadDocuments(filePath) {
-    const defaultPath = path.resolve(process.cwd(), 'test-data/Screenshot 2026-04-16 115601.png');
-    const finalPath = filePath || defaultPath;
+  // ✅ FIXED: Better Path handling
+  async uploadDocuments(fileName) {
+    // __dirname ensures it looks relative to this Page Object file
+    // We go '../' to move out of the Pages folder and into the root
+    const defaultFileName = 'Screenshot 2026-04-22 180521.png';
+    const finalPath = path.resolve(__dirname, '..', 'test-data', fileName || defaultFileName);
+
+    // Debugging: This will print the path in your terminal so you can see where it's looking
+    console.log('Looking for file at:', finalPath);
 
     const fileInputs = this.page.locator('input[id^="filepond--browser"]');
+    
+    // Check if the input exists before trying to upload
     await fileInputs.first().waitFor({ state: 'visible' });
 
     await fileInputs.nth(0).setInputFiles(finalPath);
     await fileInputs.nth(1).setInputFiles(finalPath);
 
-    await this.page.getByRole('button', { name: /remove/i }).first().waitFor({state: 'visible',timeout: 50000,});
-  } // ✅ FIXED: properly closed method
+    await this.page.getByRole('button', { name: /remove/i }).first().waitFor({
+      state: 'visible',
+      timeout: 50000,
+    });
+  
+  }
 
   async fillPersonalDetails(data) {
     await this.page.locator('#dnn_ctr7394_RdaAccountForm_txtFullName').fill(data.name);
